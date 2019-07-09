@@ -1,30 +1,43 @@
 <template>
   <div id="app">
-    <p>{{ message }}</p>
-    <div>
-       <el-table
-      :data="items"
-      style="width: 100%">
-      <el-table-column
-        prop="title"
-        label="商品名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="price"
-        label="価格"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="description"
-        label="説明">
-      </el-table-column>
-      <el-table-column
-        prop="picture_url"
-        label="画像">
-      </el-table-column>
-    </el-table>
-    </div>
+      <el-table
+    :data="items.filter(item => !search || item.title.toLowerCase().includes(search.toLowerCase()))"
+    style="width: 100%">
+    <el-table-column
+      label="商品名"
+      prop="title">
+    </el-table-column>
+    <el-table-column
+      label="価格"
+      prop="price">
+    </el-table-column>
+     <el-table-column
+      label="商品説明"
+      prop="description">
+    </el-table-column>
+     <el-table-column
+      label="画像"
+      prop="picture_url">
+    </el-table-column>
+    <el-table-column
+      align="right">
+      <template slot="header" slot-scope="scope">
+        <el-input
+          v-model="search"
+          size="mini"
+          placeholder="Type to search"/>
+      </template>
+      <template slot-scope="scope">
+        <el-button
+          size="mini"
+          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
   </div>
 </template>
 
@@ -34,7 +47,8 @@ export default {
   data: function () {
     return {
         message: "商品リスト",
-        items: null
+        items: null,
+        search: ''
     }
   },
   mounted() {
@@ -50,7 +64,13 @@ export default {
             }).catch((error)=> {
                 console.log(error);
             });           
-        } 
+        },
+        handleEdit(index, row) {
+        console.log(index, row);
+      },
+      handleDelete(index, row) {
+        console.log(index, row);
+      }
   }
 }
 </script>
