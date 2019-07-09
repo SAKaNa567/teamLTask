@@ -53,6 +53,7 @@ Rails.application.configure do
       secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
       s3_region: ENV.fetch('AWS_REGION'),
     }
+  }
   
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
