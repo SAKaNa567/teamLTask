@@ -20,6 +20,9 @@ gem 'webpacker'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
+gem 'foreman'
+gem 'paperclip'
+gem 'aws-sdk', '~> 3'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
