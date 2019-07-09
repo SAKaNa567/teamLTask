@@ -6,7 +6,7 @@ class Api::V1::ItemsController < ApplicationController
     @items = Item.all
     @item_list = []
     @items.each do |item|
-      new_field = {"picture_url" => item.picture.url}
+      new_field = {"picture_url" => "https:" + item.picture.url(:medium)}
       item = JSON::parse(item.to_json).merge(new_field)
       @item_list << item
     end
