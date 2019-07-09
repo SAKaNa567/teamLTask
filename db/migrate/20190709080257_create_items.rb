@@ -7,6 +7,6 @@ class CreateItems < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
-    add_index :product, :title, :unique => true
+    add_index :items, :title, :unique => true
   end
 end
