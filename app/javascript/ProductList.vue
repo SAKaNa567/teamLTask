@@ -20,7 +20,7 @@
         label="説明">
       </el-table-column>
       <el-table-column
-        prop="image"
+        prop="picture_url"
         label="画像">
       </el-table-column>
     </el-table>
@@ -45,8 +45,8 @@ export default {
             async loadProducts(){
             await axios.get('api/v1/items').then((response) => {
                 console.log(response);
-                console.log(response.data.data);
-                this.items = response.data.data;
+                console.log(response.data.items);
+                this.items = response.data.items;
             }).catch((error)=> {
                 console.log(error);
             });           

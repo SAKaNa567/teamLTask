@@ -4,8 +4,13 @@ class Api::V1::ItemsController < ApplicationController
   # GET /items
   def index
     @items = Item.all
-
-    render json: @items
+    @item_list = []
+    @items.each do |item|
+      new_field = {"picture_url" => item.picture.url}
+      item = JSON::parse(item.to_json).merge(new_field)
+      @item_list << item
+    end
+    render json: { status: 'success', items: @item_list}
   end
 
   # GET /items/1
@@ -18,7 +23,7 @@ class Api::V1::ItemsController < ApplicationController
     @item = Item.new(item_params)
 
     if @item.save
-      render json: @item, status: :created, location: @item
+      render json: @item, status: :created
     else
       render json: @item.errors, status: :unprocessable_entity
     end

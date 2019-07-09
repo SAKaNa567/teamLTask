@@ -8,15 +8,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ProductList from 'ProductList.vue'
-import StoreList from 'StoreList.vue'
 import AddProduct from 'AddProduct.vue'
 
 const router = new VueRouter({
   routes: [
     {path: '/products',
     component: ProductList },
-    {path: '/stores',
-    component: StoreList },
     {path: '/product/add',
     component: AddProduct}
   ]
