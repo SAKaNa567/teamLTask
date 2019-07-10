@@ -1,4 +1,4 @@
-class StoresController < ApplicationController
+class Api::V1::StoresController < ApplicationController
   before_action :set_store, only: [:show, :update, :destroy]
 
   # GET /stores
