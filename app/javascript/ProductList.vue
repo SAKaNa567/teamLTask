@@ -15,9 +15,10 @@
       label="商品説明"
       prop="description">
     </el-table-column>
-     <el-table-column
-      label="画像"
-      prop="picture_url">
+     <el-table-column label="画像">
+      <template slot-scope="scope">
+        <img :src="scope.row.picture_url" />
+      </template>
     </el-table-column>
     <el-table-column
       align="right">
@@ -30,11 +31,11 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+          @click="handleEdit(scope.$index, scope.row)">編集</el-button>
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+          @click="handleDelete(scope.$index, scope.row)">削除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -67,10 +68,21 @@ export default {
         },
         handleEdit(index, row) {
         console.log(index, row);
+        //指定されたapi/v1/rowへ画面遷移して商品の編集を可能にする.
+
       },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
+      async handleDelete(index, row) {
+        // console.log(index, row);
+        // console.log("rowを表示します",row);
+        console.log(row.id);
+        if(window.confirm("この商品を削除しますか？")){
+            await axios.delete('api/v1/items/'+row.id).then(response => {
+                console.log("delete success");
+            }).catch(error => {
+                console.log("delete error");
+            });
+        }
+      },
   }
 }
 </script>
