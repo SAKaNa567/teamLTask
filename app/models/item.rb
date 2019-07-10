@@ -11,4 +11,6 @@ class Item < ApplicationRecord
       square: '200x200#',
       medium: '300x300>'
     }
+    has_many :stores, :through => :product_stores
+    has_many :product_stores, dependent: :destroy
 end

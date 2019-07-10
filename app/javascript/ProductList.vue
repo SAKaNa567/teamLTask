@@ -15,9 +15,10 @@
       label="商品説明"
       prop="description">
     </el-table-column>
-     <el-table-column
-      label="画像"
-      prop="picture_url">
+     <el-table-column label="画像">
+      <template slot-scope="scope">
+        <img :src="scope.row.picture_url" />
+      </template>
     </el-table-column>
     <el-table-column
       align="right">
@@ -30,11 +31,11 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+          @click="handleEdit(scope.$index, scope.row)">編集</el-button>
         <el-button
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+          @click="handleDelete(scope.$index, scope.row)">削除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -56,21 +57,37 @@ export default {
   // this.loadStores();
   },
   methods: {
-            async loadProducts(){
+    async loadProducts(){
             await axios.get('api/v1/items').then((response) => {
-                console.log(response);
-                console.log(response.data.items);
+              console.log(response);
                 this.items = response.data.items;
             }).catch((error)=> {
                 console.log(error);
             });           
-        },
-        handleEdit(index, row) {
+    },
+    handleEdit(index, row) {
         console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
+        //指定されたapi/v1/rowへ画面遷移して商品の編集を可能にする.
+        this.$router.push({name: 'EditProduct', params: { productid: row.id}})
+    },
+    async handleDelete(index, row) {
+        console.log(row.id);
+        if(window.confirm("この商品を削除しますか？")){
+            const loading = this.$loading({
+              lock: true,
+              text: '削除中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0,0,0,0.7)'
+            })
+            await axios.delete('api/v1/items/'+row.id).then(response => {
+                console.log("delete success");
+                loading.close()
+            }).catch(error => {
+                console.log("delete error");
+                loading.close();
+            });
+        }
+    },
   }
 }
 </script>
