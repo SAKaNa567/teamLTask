@@ -1,21 +1,31 @@
 <template>
-    <el-form @submit.prevent="$emit('submit')" ref="product" :model="product" label-width="120px">
-    <el-form-item label="商品名">
+   <div id="app">
+     <div style="text-align:center">{{ message }}</div>
+      <el-form @submit.prevent="$emit('submit')" ref="product" :model="product" :rules="rules" label-width="120px">
+    <el-form-item label="商品名" prop="title">
     <el-input v-model="product.title"></el-input>
     </el-form-item>
-    <el-form-item label="価格">
+    <el-form-item label="価格" prop="price">
     <el-input  type="number" v-model="product.price"></el-input>
     </el-form-item>
-    <el-form-item label="商品説明">
+    <el-form-item label="商品説明" prop="description">
     <el-input type="textarea" v-model="product.description"></el-input>
     </el-form-item>
+    <el-form-item label="商品画像">
     <img v-show="product.picture" :src="product.picture" />
     <input type="file" v-on:change="onFileChange">
+    </el-form-item>
     <el-form-item>
-    <el-button type="primary" @click="createProduct">Create</el-button>
-    <el-button>Cancel</el-button>
+    <el-button type="primary" @click="createProduct"
+    v-bind:disabled="!product.title ||
+                      !product.price ||
+                      !product.description ||
+                      !product.picture"
+    >作成</el-button>
+    <el-button @click="onCancel">キャンセル</el-button>
     </el-form-item>
     </el-form>
+   </div>
 </template>
 
 <script>
@@ -24,17 +34,37 @@ import axios from 'axios';
   export default {
     data() {
       return {
+        message: '商品新規追加',
         product: {
           title: '',
           price: null,
           description: '',
-          picture: null
+          picture: ""
+        },
+        rules: {
+          title: [
+            { required: true, message: 'please input 商品名', trigger: 'blur'},
+            { min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+          ],
+          price: [
+            { required: true, message: 'please input 価格', trigger: 'blur'},
+          ],
+          description: [
+            { required: true, message: 'please input 商品説明', trigger: 'blur'},
+            { min: 5, max: 500, message: 'Length should be 5 to 500', trigger: 'blur'}
+          ]
         }
       }
     },
     methods: {
         createProduct() {
             console.log(this.product);
+            const loading = this.$loading({
+              lock: true,
+              text: '保存中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0,0,0,0.7)'
+            })
             axios.post('api/v1/items',{
                 "item":{
                     title: this.product.title,
@@ -44,12 +74,21 @@ import axios from 'axios';
                 }
             }).then( response => {
                 console.log(response)
+                this.product.price=null;
+                this.product.title = '';
+                this.product.picture = '',
+                this.product.description = ''
+                loading.close();
             }).catch(error => {
                 console.log(error);
+                loading.close();
             });
+          console.log("[success] create product")
         },
-        onSubmit() {
-            console.log('submit!');
+        onCancel() {
+          this.$router.push({
+            name: 'ProductList'
+          });
         },
         onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;

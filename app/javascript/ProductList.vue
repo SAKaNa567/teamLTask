@@ -57,32 +57,37 @@ export default {
   // this.loadStores();
   },
   methods: {
-            async loadProducts(){
+    async loadProducts(){
             await axios.get('api/v1/items').then((response) => {
-                console.log(response);
-                console.log(response.data.items);
+              console.log(response);
                 this.items = response.data.items;
             }).catch((error)=> {
                 console.log(error);
             });           
-        },
-        handleEdit(index, row) {
+    },
+    handleEdit(index, row) {
         console.log(index, row);
         //指定されたapi/v1/rowへ画面遷移して商品の編集を可能にする.
-
-      },
-      async handleDelete(index, row) {
-        // console.log(index, row);
-        // console.log("rowを表示します",row);
+        this.$router.push({name: 'EditProduct', params: { productid: row.id}})
+    },
+    async handleDelete(index, row) {
         console.log(row.id);
         if(window.confirm("この商品を削除しますか？")){
+            const loading = this.$loading({
+              lock: true,
+              text: '削除中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0,0,0,0.7)'
+            })
             await axios.delete('api/v1/items/'+row.id).then(response => {
                 console.log("delete success");
+                loading.close()
             }).catch(error => {
                 console.log("delete error");
+                loading.close();
             });
         }
-      },
+    },
   }
 }
 </script>
