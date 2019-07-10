@@ -1,1 +1,2 @@
-web: bundle exec puma server -p $PORT
+web: bundle exec rails server -p $PORT
+webpacker: ./bin/webpack-dev-server
