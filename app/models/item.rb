@@ -1,7 +1,7 @@
 class Item < ApplicationRecord
-    validates :title, presence: true
+    validates :title, presence: true, length: { maximum: 100 }
     validates :price, presence: true
-    validates :description, presence: true
+    validates :description, presence: true, length: { maximum: 500 }
     validates :picture,
       attachment_content_type: { content_type: /\Aimage\/.*\Z/ },
       attachment_size: { less_than: 5.megabytes }

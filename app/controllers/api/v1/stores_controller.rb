@@ -10,7 +10,8 @@ class Api::V1::StoresController < ApplicationController
 
   # GET /stores/1
   def show
-    render json: @store
+    stores_items = @store.product_stores
+    render json: { status: "success", data: { name: @store.name, stores_items: stores_items }}
   end
 
   # POST /stores
